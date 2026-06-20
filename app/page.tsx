@@ -87,6 +87,7 @@ export default function MantleRWAScout() {
   const [loading, setLoading] = useState(false);
 
   const runAgent = async (asset: any) => {
+    alert("runAgent called");
     setSelected(asset);
     setBrief(null);
     setLoading(true);
