@@ -274,3 +274,5 @@ Write like someone who actually understands onchain finance, not like a press re
       setBrief(text);
     } catch {
       setBrief("Agent
+               );
+}
