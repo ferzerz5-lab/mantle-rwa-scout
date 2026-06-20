@@ -94,14 +94,9 @@ export default function MantleRWAScout() {
     const prompt = `Analyze this Mantle ecosystem asset and produce a concise research brief: ${asset.name} (${asset.symbol}), Type: ${asset.type}, Issuer: ${asset.issuer}, TVL: ${asset.tvl}, Distribution Score: ${asset.distributionScore}/100. Reference the SpaceX IPO episode from June 2026 where over $1 billion in crypto orders for tokenized SpaceX shares were refunded because xStocks could not source allocation from Goldman Sachs and Morgan Stanley. Keep it under 200 words, no em dashes.`;
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }],
-        }),
+      const response = await fetch("/api/research", {
+       headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
       });
       const data = await response.json();
       const text = data.content?.map((b: any) => b.text || "").join("") || "Unable to generate brief.";
