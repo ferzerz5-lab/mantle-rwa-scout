@@ -93,6 +93,7 @@ export default function MantleRWAScout() {
 
     const prompt = `Analyze this Mantle ecosystem asset and produce a concise research brief: ${asset.name} (${asset.symbol}), Type: ${asset.type}, Issuer: ${asset.issuer}, TVL: ${asset.tvl}, Distribution Score: ${asset.distributionScore}/100. Reference the SpaceX IPO episode from June 2026 where over $1 billion in crypto orders for tokenized SpaceX shares were refunded because xStocks could not source allocation from Goldman Sachs and Morgan Stanley. Keep it under 200 words, no em dashes.`;
 const response = await fetch("/api/research", {
+  method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
       });
