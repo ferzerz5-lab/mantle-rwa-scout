@@ -112,3 +112,110 @@ export default function MantleRWAScout() {
       setLoading(false);
     }
   };
+  return (
+    <div style={{ minHeight: "100vh", background: "#080808", color: "#e0e0e0", fontFamily: "'Inter', 'Helvetica Neue', sans-serif", padding: "0 0 60px" }}>
+      <div style={{ borderBottom: "1px solid #161616", padding: "20px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 28, height: 28, background: "#C8F135", borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "#080808", fontWeight: 900, fontSize: 13 }}>M</span>
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: "#f0f0f0" }}>Mantle RWA Scout</div>
+            <div style={{ fontSize: 10, color: "#444", fontFamily: "monospace" }}>ERC-8004 REGISTERED AGENT</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#C8F135" }} />
+          <span style={{ fontSize: 10, color: "#555", fontFamily: "monospace" }}>LIVE ON MANTLE</span>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "36px 24px 0" }}>
+        <div style={{ marginBottom: 36 }}>
+          <div style={{ fontSize: 10, color: "#C8F135", fontFamily: "monospace", marginBottom: 10 }}>DISTRIBUTION INTELLIGENCE</div>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: "#f4f4f4", lineHeight: 1.2, margin: "0 0 12px" }}>
+            The gap between what's live onchain and what's gatekept off it.
+          </h1>
+          <p style={{ fontSize: 13.5, color: "#666", lineHeight: 1.65, margin: 0, maxWidth: 560 }}>
+            Select a Mantle ecosystem asset to run a live research brief.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, background: "#111", border: "1px solid #1a1a1a", borderRadius: 8, overflow: "hidden", marginBottom: 28 }}>
+          {[
+            { label: "RWA TVL", value: "$247.5M", sub: "Q1 2026" },
+            { label: "QoQ Growth", value: "+27.4%", sub: "Messari verified" },
+            { label: "Agent Stack", value: "4 primitives", sub: "ERC-8004, Skills, Scaffold, x402" },
+          ].map((s) => (
+            <div key={s.label} style={{ padding: "16px 18px", background: "#0c0c0c" }}>
+              <div style={{ fontSize: 11, color: "#444", fontFamily: "monospace", marginBottom: 4 }}>{s.label}</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#C8F135" }}>{s.value}</div>
+              <div style={{ fontSize: 10, color: "#333", marginTop: 2 }}>{s.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 10, color: "#444", fontFamily: "monospace", marginBottom: 12 }}>SELECT ASSET TO RESEARCH</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {MANTLE_ASSETS.map((asset) => {
+              const isSelected = selected?.id === asset.id;
+              return (
+                <button key={asset.id} onClick={() => runAgent(asset)} style={{ background: isSelected ? "#111" : "#0c0c0c", border: `1px solid ${isSelected ? "#C8F135" : "#1a1a1a"}`, borderRadius: 6, padding: "14px 18px", cursor: "pointer", textAlign: "left", display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 16 }}>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                      <span style={{ fontWeight: 700, fontSize: 13.5, color: isSelected ? "#C8F135" : "#d0d0d0" }}>{asset.symbol}</span>
+                      <span style={{ color: "#444", fontSize: 12 }}>{asset.name}</span>
+                      <span style={{ fontSize: 9, background: "rgba(200,241,53,0.08)", color: "#C8F135", padding: "2px 6px", borderRadius: 3, fontFamily: "monospace" }}>{asset.status.toUpperCase()}</span>
+                    </div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {asset.tags.map((t) => <Tag key={t} label={t} />)}
+                      <Tag label={asset.issuer} />
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right", minWidth: 120 }}>
+                    <div style={{ fontSize: 11, color: "#333", fontFamily: "monospace", marginBottom: 5 }}>DISTRIBUTION SCORE</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end", marginBottom: 6 }}>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: "#f0f0f0" }}>{asset.distributionScore}</span>
+                      <ScoreLabel score={asset.distributionScore} />
+                    </div>
+                    <ScoreBar score={asset.distributionScore} color={asset.distributionScore >= 80 ? "#C8F135" : asset.distributionScore >= 55 ? "#f5c518" : "#ff5c5c"} />
+                    <div style={{ fontSize: 11, color: "#444", marginTop: 5 }}>TVL {asset.tvl}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <ResearchBrief asset={selected} brief={brief} loading={loading} />
+
+        <div style={{ marginTop: 24, background: "#0a0a0a", border: "1px solid #161616", borderRadius: 8, padding: "18px 20px" }}>
+          <div style={{ fontSize: 10, color: "#444", fontFamily: "monospace", marginBottom: 10 }}>DISTRIBUTION SCORE METHODOLOGY</div>
+          <p style={{ fontSize: 12.5, color: "#555", lineHeight: 1.65, margin: 0 }}>
+            Scores reflect allocation pipeline readiness, whether an asset's underlying supply can be sourced and custodied without a TradFi gatekeeper controlling the bottleneck. The SpaceX episode established the benchmark: over $1B in onchain demand, zero allocation delivered.
+          </p>
+        </div>
+
+        <AgentCardPanel />
+
+        <div style={{ marginTop: 16, padding: "14px 18px", background: "#0a0a0a", border: "1px solid #161616", borderRadius: 6, display: "flex", alignItems: "flex-start", gap: 12 }}>
+          <div style={{ width: 20, height: 20, background: "rgba(200,241,53,0.08)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+            <span style={{ color: "#C8F135", fontSize: 10, fontWeight: 700 }}>₿</span>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, color: "#C8F135", fontFamily: "monospace", marginBottom: 4 }}>x402 PAYMENT LAYER</div>
+            <p style={{ fontSize: 12, color: "#444", lineHeight: 1.6, margin: 0 }}>
+              This agent is architected for x402 monetization, gating premium research briefs and TVL alerts behind stablecoin micropayments at the HTTP layer.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 36, paddingTop: 20, borderTop: "1px solid #111", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 11, color: "#2a2a2a", fontFamily: "monospace" }}>MANTLE RWA SCOUT — TRACK 2 SUBMISSION</span>
+          <span style={{ fontSize: 11, color: "#2a2a2a", fontFamily: "monospace" }}>BUILT FOR MANTLE RESEARCH CHALLENGE 2026</span>
+        </div>
+      </div>
+    </div>
+  );
+}
